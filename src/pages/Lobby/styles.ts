@@ -1,7 +1,8 @@
 import styled from "styled-components/native";
 
-export const Container = styled.ScrollView`
+export const Container = styled.View`
     padding: 0 20px;
+    flex: 1;
 `
 
 export const ContainerId = styled.View`
@@ -60,5 +61,17 @@ export const ShareButton = styled.TouchableOpacity`
     border-radius: 20px;
     align-items: center;
     justify-content: center;
+`
+
+export const ClipboardToast = styled.View`
+    height: 45px;
+    width: 90%;
+    bottom: 100px;
+    align-self: center;
+    position: absolute;
+    background-color: rgba(100,100,100, .4);
+    align-items: center;
+    justify-content: center;
+    border-radius: 20px;
 `
 

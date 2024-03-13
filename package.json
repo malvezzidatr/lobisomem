@@ -11,6 +11,7 @@
   "dependencies": {
     "@types/styled-components": "^5.1.34",
     "expo": "^50.0.0",
+    "expo-clipboard": "~5.0.1",
     "expo-image": "~1.10.6",
     "expo-linear-gradient": "~12.7.2",
     "expo-status-bar": "~1.11.1",
@@ -21,6 +22,7 @@
     "react-native-fast-image": "^8.6.3",
     "react-native-svg": "14.1.0",
     "react-native-svg-animations": "^1.0.0",
+    "socket.io-client": "^4.7.4",
     "styled-components": "^6.1.8"
   },
   "devDependencies": {
