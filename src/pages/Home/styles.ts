@@ -17,8 +17,7 @@ export const ContainerTitle = styled.View`
 
 export const Moon = styled.Image`
     position: absolute;
-    right: -8;
-    z-index: 1;
+    right: -8px;
 `
 
 export const WolfTitle = styled.Image`

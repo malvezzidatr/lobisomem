@@ -1,49 +1,73 @@
 import React, { useEffect, useState } from "react";
 import * as S from './styles';
-import { Text, View } from "react-native";
+import { BackHandler, Text, View } from "react-native";
 import * as Clipboard from 'expo-clipboard';
 import io from 'socket.io-client';
-
-interface Message {
-    name: string;
-    text: string;
-}
-
-interface Payload {
-    name: string;
-    message: string;
-}
+import { NativeStackScreenProps } from "@react-navigation/native-stack";
+import { RootStackParamList } from "../../../App";
+import { useNavigation } from "@react-navigation/native";
 
 const socket = io('http://192.168.15.129:3333', {
   transports: ["websocket"],
 });
 
-export const Lobby = () => {
-    const [lobbyID, setLobbyID] = useState<string>('');
+interface Props extends NativeStackScreenProps<RootStackParamList, 'Lobby'> {}
+
+interface Lobby {
+    players: string[];
+    id: string;
+}
+
+export const Lobby = ({ route }: Props) => {
+    const { params } = route;
+    const navigate = useNavigation();
+    const [lobby, setLobby] = useState<Lobby>();
     const [showToast, setShowToast] = useState<boolean>(false);
+
+    
+
+    useEffect(() => {
+        socket.on(`lobby_${params?.adminName}`, (lobby: any) => {
+            console.log(lobby)
+            setLobby(lobby)
+        })
+
+        return () => {
+            socket.off('lobby');
+        };
+    }, [])
+
+    useEffect(() => {
+        const backHandler = BackHandler.addEventListener(
+            "hardwareBackPress",
+            handleBackPress
+        );
+
+        return () => backHandler.remove();
+    }, [navigate]);
+
+    const handleBackPress = () => {
+        console.log("Usuário pressionou o botão de voltar");
+
+        return false;
+    };
 
 
     const copyCode = async () => {
-        await Clipboard.setStringAsync(lobbyID);
+        await Clipboard.setStringAsync(lobby?.id ?? '');
         setShowToast(true)
+        console.log(lobby)
         setTimeout(() => {
             setShowToast(false);
         }, 2000)
     }
-
-    useEffect(() => {
-        socket.emit('createLobby');
-        socket.on('lobbyCreated', (lobbyID: string) => {
-            setLobbyID(lobbyID);
-        })
-    }, [])
 
     return (
             <S.Container>
                 <S.ContainerId>
                     <S.Text>O id do seu lobby é:</S.Text>
                     <S.ContainerWithId onPress={copyCode}>
-                        <S.Id>{lobbyID}</S.Id>
+                        <S.Id>{lobby?.id}</S.Id>
                     </S.ContainerWithId>
                     <S.ShareContainer>
                         <S.CopyButton onPress={copyCode}><Text>Copiar código</Text></S.CopyButton>
@@ -55,6 +79,13 @@ export const Lobby = () => {
                     <S.ClipboardToast>
                         <Text style={{color: 'white'}}>Copiado para a área de transferência.</Text>
                     </S.ClipboardToast>
+                }
+                {
+                    lobby?.players?.map(player => (
+                        <View key={player} style={{width: 60, height: 60, backgroundColor: 'gray'}} >
+                            <Text>{player}</Text>
+                        </View>
+                    ))
                 }
             </S.Container>
             
