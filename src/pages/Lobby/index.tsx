@@ -6,6 +6,7 @@ import io from 'socket.io-client';
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { RootStackParamList } from "../../../App";
 import { useNavigation } from "@react-navigation/native";
+import { generateLobby } from "../../utils";
 
 const socket = io('http://192.168.15.129:3333', {
   transports: ["websocket"],
@@ -25,9 +26,10 @@ export interface Lobby {
 
 export const Lobby = ({ route }: Props) => {
     const { params } = route;
-    const navigate = useNavigation();
     const [lobby, setLobby] = useState<Lobby>();
     const [showToast, setShowToast] = useState<boolean>(false);
+    const [lobbyID, serLobbyID] = useState<string>(params?.lobbyID as string || params?.lobby?.id as string);
+
 
     useEffect(() => {
         if(!params?.create) {
@@ -37,9 +39,9 @@ export const Lobby = ({ route }: Props) => {
 
     useEffect(() => {
         if(params?.create) {
-            socket.emit('createLobby', { lobbyID: params?.lobbyID, name: 'Caio' });
+            socket.emit('createLobby', { lobbyID: lobbyID, name: 'Caio', userId: generateLobby() });
         }
-        socket.on(`lobby_${params?.lobbyID}`, (lobby: any) => {
+        socket.on(`lobby_${lobbyID}`, (lobby: any) => {
             setLobby(lobby)
         })
     }, [socket.on])
@@ -47,7 +49,6 @@ export const Lobby = ({ route }: Props) => {
     const copyCode = async () => {
         await Clipboard.setStringAsync(lobby?.id ?? '');
         setShowToast(true)
-        console.log(lobby)
         setTimeout(() => {
             setShowToast(false);
         }, 2000)
@@ -72,8 +73,8 @@ export const Lobby = ({ route }: Props) => {
                     </S.ClipboardToast>
                 }
                 {
-                    lobby?.players?.map(player => (
-                        <View key={player?.name} style={{width: 60, height: 60, backgroundColor: 'gray'}} >
+                    lobby?.players?.map((player, index) => (
+                        <View key={index} style={{width: 60, height: 60, backgroundColor: 'gray'}} >
                             <Text>{player?.name}</Text>
                         </View>
                     ))
