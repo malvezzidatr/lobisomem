@@ -13,8 +13,13 @@ const socket = io('http://192.168.15.129:3333', {
 
 interface Props extends NativeStackScreenProps<RootStackParamList, 'Lobby'> {}
 
-interface Lobby {
-    players: string[];
+interface Player {
+    id: string;
+    name: string
+}
+
+export interface Lobby {
+    players: Player[];
     id: string;
 }
 
@@ -24,34 +29,20 @@ export const Lobby = ({ route }: Props) => {
     const [lobby, setLobby] = useState<Lobby>();
     const [showToast, setShowToast] = useState<boolean>(false);
 
-    
-
     useEffect(() => {
-        socket.on(`lobby_${params?.adminName}`, (lobby: any) => {
-            console.log(lobby)
-            setLobby(lobby)
-        })
-
-        return () => {
-            socket.off('lobby');
-        };
+        if(!params?.create) {
+            setLobby(params?.lobby)
+        }
     }, [])
 
     useEffect(() => {
-        const backHandler = BackHandler.addEventListener(
-            "hardwareBackPress",
-            handleBackPress
-        );
-
-        return () => backHandler.remove();
-    }, [navigate]);
-
-    const handleBackPress = () => {
-        console.log("Usuário pressionou o botão de voltar");
-
-        return false;
-    };
-
+        if(params?.create) {
+            socket.emit('createLobby', { lobbyID: params?.lobbyID, name: 'Caio' });
+        }
+        socket.on(`lobby_${params?.lobbyID}`, (lobby: any) => {
+            setLobby(lobby)
+        })
+    }, [socket.on])
 
     const copyCode = async () => {
         await Clipboard.setStringAsync(lobby?.id ?? '');
@@ -82,8 +73,8 @@ export const Lobby = ({ route }: Props) => {
                 }
                 {
                     lobby?.players?.map(player => (
-                        <View key={player} style={{width: 60, height: 60, backgroundColor: 'gray'}} >
-                            <Text>{player}</Text>
+                        <View key={player?.name} style={{width: 60, height: 60, backgroundColor: 'gray'}} >
+                            <Text>{player?.name}</Text>
                         </View>
                     ))
                 }

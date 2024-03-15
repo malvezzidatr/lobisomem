@@ -3,6 +3,7 @@ import * as S from './styles';
 import { Image, Text } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { io } from "socket.io-client";
+import { generateLobby } from "../../utils";
 
 const socket = io('http://192.168.15.129:3333', {
   transports: ["websocket"],
@@ -11,23 +12,9 @@ const socket = io('http://192.168.15.129:3333', {
 export const Home = () => {
     const navigate = useNavigation();
 
-    const generateLobby = () => {
-        const caracteres = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-        let codigo = '';
-        const width = 9;
-        
-        for (let i = 0; i < width; i++) {
-            const indiceAleatorio = Math.floor(Math.random() * caracteres.length);
-            codigo += caracteres.charAt(indiceAleatorio);
-        }
-        
-        return codigo;
-    }
-
     const newGame = () => {
         const id = generateLobby()
-        socket.emit('createLobby', id);
-        navigate.navigate('Lobby', { adminName: id });
+        navigate.navigate('Lobby', { name: 'Caio', lobbyID: id, create: true });
     }
 
     return (
