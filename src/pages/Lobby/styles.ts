@@ -75,3 +75,34 @@ export const ClipboardToast = styled.View`
     border-radius: 20px;
 `
 
+export const PlayersContainer = styled.View`
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    margin-top: 30px;
+    width: 100%;
+`
+
+export const PlayerContainer = styled.View`
+    align-items: center;
+    justify-content: center;
+    padding: 0 15px;
+    margin-bottom: 20px;
+` 
+
+export const PlayerIconContainer = styled.View`
+    width: 80px;
+    height: 80px;
+    background-color: #3A3A50;
+    border-radius: 50px;
+    align-items: center;
+    justify-content: center;
+` 
+
+export const PlayerName = styled.Text`
+    color: #3A3A50;
+    font-weight: 700;
+    font-size: 18px;
+    margin-top: 5px;
+` 
+
