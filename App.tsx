@@ -7,7 +7,7 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
 export type RootStackParamList = {
   Home: undefined;
-  Lobby: { name?: string, lobbyID?: string, create?: boolean, lobby?: Lobby };
+  Lobby: { name?: string, lobbyID?: string, create?: boolean, lobby?: Lobby, userID?: string };
   InitialLoading: undefined;
   ConnectToLobby: undefined;
 };

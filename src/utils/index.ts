@@ -1,7 +1,6 @@
-export const generateLobby = () => {
+export const generateLobby = (width: number = 9) => {
     const caracteres = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
     let codigo = '';
-    const width = 1;
     
     for (let i = 0; i < width; i++) {
         const indiceAleatorio = Math.floor(Math.random() * caracteres.length);

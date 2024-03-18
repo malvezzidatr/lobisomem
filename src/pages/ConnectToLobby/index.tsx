@@ -1,8 +1,12 @@
 import { NavigationProp, useNavigation } from "@react-navigation/native";
+import 'react-native-get-random-values';
 import React, { useEffect, useState } from "react";
 import { Button, TextInput, View } from "react-native";
 import { io } from "socket.io-client";
 import { generateLobby } from "../../utils";
+import { Lobby } from "../Lobby";
+import { v4 as uuidv4 } from 'uuid';
+
 
 const socket = io('http://192.168.15.129:3333', {
   transports: ["websocket"],
@@ -12,7 +16,7 @@ export const ConnectToLobby = () => {
     const navigate = useNavigation();
     const [userName, setUserName] = useState<string>('');
     const [lobbyID, setLobbyID] = useState<string>('');
-    const [userID, setUserID] = useState<string>(generateLobby());
+    const [userID, setUserID] = useState<string>(uuidv4());
 
     const connect = () => {
         socket.emit('connectToLobby', {
@@ -23,9 +27,9 @@ export const ConnectToLobby = () => {
     }
 
     useEffect(() => {
-        socket.on(userID, (lobby: any) => {
+        socket.on(userID, (lobby: Lobby) => {
             if(lobby) {
-                navigate.navigate('Lobby', { lobby });
+                navigate.navigate('Lobby', { lobby, name: userName, userID });
             }
         })
     }, [socket.on])
