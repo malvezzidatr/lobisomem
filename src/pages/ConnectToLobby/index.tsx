@@ -1,9 +1,8 @@
-import { NavigationProp, useNavigation } from "@react-navigation/native";
+import { useNavigation } from "@react-navigation/native";
 import 'react-native-get-random-values';
 import React, { useEffect, useState } from "react";
 import { Button, TextInput, View } from "react-native";
 import { io } from "socket.io-client";
-import { generateLobby } from "../../utils";
 import { Lobby } from "../Lobby";
 import { v4 as uuidv4 } from 'uuid';
 

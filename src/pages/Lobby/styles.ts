@@ -5,6 +5,15 @@ export const Container = styled.View`
     flex: 1;
 `
 
+export const Header = styled.View`
+    height: 70px;
+    width: 100%;
+    background-color: #3A3A50;
+    align-items: center;
+    padding: 0 10px;
+    flex-direction: row;
+`
+
 export const ContainerId = styled.View`
     width: 100%;
     height: 235px;
@@ -14,6 +23,7 @@ export const ContainerId = styled.View`
     justify-content: space-evenly;
     padding: 0 18px;
     margin-top: 40px;
+    
 `
 
 export const Text = styled.Text`

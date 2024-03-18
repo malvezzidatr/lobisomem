@@ -1,9 +1,11 @@
+import { Text } from 'react-native';
 import { ConnectToLobby } from './src/pages/ConnectToLobby';
 import { Home } from './src/pages/Home';
 import { Lobby } from './src/pages/Lobby';
 import { InitialLoading } from './src/pages/initialLoading';
-import { NavigationContainer } from '@react-navigation/native';
+import { NavigationContainer, useNavigation } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import Ionicons from '@expo/vector-icons/Ionicons';
 
 export type RootStackParamList = {
   Home: undefined;
@@ -36,7 +38,7 @@ export default function App() {
             stackRoutes?.map(item => (
               <Stack.Screen
                 options={{
-                  headerShown: item.headerShown ?? false,
+                  headerShown: false,
                   headerStyle: {
                     backgroundColor: '#3A3A50',
                   },
