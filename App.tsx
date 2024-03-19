@@ -3,9 +3,10 @@ import { ConnectToLobby } from './src/pages/ConnectToLobby';
 import { Home } from './src/pages/Home';
 import { Lobby } from './src/pages/Lobby';
 import { InitialLoading } from './src/pages/initialLoading';
-import { NavigationContainer, useNavigation } from '@react-navigation/native';
+import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import Ionicons from '@expo/vector-icons/Ionicons';
+import { Provider } from 'react-redux';
+import { store } from './src/slices/userStore';
 
 export type RootStackParamList = {
   Home: undefined;
@@ -31,28 +32,30 @@ const Stack = createNativeStackNavigator<RootStackParamList>();
 
 export default function App() {
   return (
-    <NavigationContainer>
-      <Stack.Navigator initialRouteName='InitialLoading'>
-        <Stack.Group>
-          {
-            stackRoutes?.map(item => (
-              <Stack.Screen
-                options={{
-                  headerShown: false,
-                  headerStyle: {
-                    backgroundColor: '#3A3A50',
-                  },
-                  headerTintColor: 'white',
-                  headerBackTitleVisible: false
-                }}
-                key={item.route}
-                name={item.route}
-                component={item.component}
-              />
-            ))
-          }
-        </Stack.Group>
-      </Stack.Navigator>
-    </NavigationContainer>
+    <Provider store={store}>
+      <NavigationContainer>
+        <Stack.Navigator initialRouteName='InitialLoading'>
+          <Stack.Group>
+            {
+              stackRoutes?.map(item => (
+                <Stack.Screen
+                  options={{
+                    headerShown: false,
+                    headerStyle: {
+                      backgroundColor: '#3A3A50',
+                    },
+                    headerTintColor: 'white',
+                    headerBackTitleVisible: false
+                  }}
+                  key={item.route}
+                  name={item.route}
+                  component={item.component}
+                />
+              ))
+            }
+          </Stack.Group>
+        </Stack.Navigator>
+      </NavigationContainer>
+    </Provider>
   );
 }

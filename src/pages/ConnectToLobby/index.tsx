@@ -1,11 +1,10 @@
 import { useNavigation } from "@react-navigation/native";
 import 'react-native-get-random-values';
 import React, { useEffect, useState } from "react";
-import { Button, TextInput, View } from "react-native";
+import { Button, Text, TextInput, View } from "react-native";
 import { io } from "socket.io-client";
 import { Lobby } from "../Lobby";
 import { v4 as uuidv4 } from 'uuid';
-
 
 const socket = io('http://192.168.15.129:3333', {
   transports: ["websocket"],
