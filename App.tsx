@@ -6,7 +6,8 @@ import { InitialLoading } from './src/pages/initialLoading';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { Provider } from 'react-redux';
-import { store } from './src/slices/userStore';
+import { persistor, store } from './src/slices/userStore';
+import { PersistGate } from 'redux-persist/integration/react';
 
 export type RootStackParamList = {
   Home: undefined;
@@ -33,29 +34,31 @@ const Stack = createNativeStackNavigator<RootStackParamList>();
 export default function App() {
   return (
     <Provider store={store}>
-      <NavigationContainer>
-        <Stack.Navigator initialRouteName='InitialLoading'>
-          <Stack.Group>
-            {
-              stackRoutes?.map(item => (
-                <Stack.Screen
-                  options={{
-                    headerShown: false,
-                    headerStyle: {
-                      backgroundColor: '#3A3A50',
-                    },
-                    headerTintColor: 'white',
-                    headerBackTitleVisible: false
-                  }}
-                  key={item.route}
-                  name={item.route}
-                  component={item.component}
-                />
-              ))
-            }
-          </Stack.Group>
-        </Stack.Navigator>
-      </NavigationContainer>
+      <PersistGate loading={null} persistor={persistor}>
+        <NavigationContainer>
+          <Stack.Navigator initialRouteName='InitialLoading'>
+            <Stack.Group>
+              {
+                stackRoutes?.map(item => (
+                  <Stack.Screen
+                    options={{
+                      headerShown: false,
+                      headerStyle: {
+                        backgroundColor: '#3A3A50',
+                      },
+                      headerTintColor: 'white',
+                      headerBackTitleVisible: false
+                    }}
+                    key={item.route}
+                    name={item.route}
+                    component={item.component}
+                  />
+                ))
+              }
+            </Stack.Group>
+          </Stack.Navigator>
+        </NavigationContainer>
+      </PersistGate>
     </Provider>
   );
 }

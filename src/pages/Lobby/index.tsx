@@ -8,6 +8,8 @@ import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { RootStackParamList } from "../../../App";
 import Ionicons from '@expo/vector-icons/Ionicons';
 import { useNavigation } from "@react-navigation/native";
+import { useDispatch, useSelector } from "react-redux";
+import { UserSliceState } from "../../slices/userStore";
 
 const socket = io('http://192.168.15.129:3333', {
   transports: ["websocket"],
@@ -16,7 +18,7 @@ const socket = io('http://192.168.15.129:3333', {
 interface Props extends NativeStackScreenProps<RootStackParamList, 'Lobby'> {}
 
 interface Player {
-    id: string;
+    userID: string;
     name: string
 }
 
@@ -31,6 +33,7 @@ export const Lobby = ({ route }: Props) => {
     const navigate = useNavigation();
     const [showToast, setShowToast] = useState<boolean>(false);
     const [lobbyID, serLobbyID] = useState<string>(params?.lobbyID as string || params?.lobby?.id as string);
+    const userNameInAllScreens = useSelector((state: UserSliceState) => state.name);
 
     useEffect(() => {
         if(!params?.create) {
@@ -42,7 +45,7 @@ export const Lobby = ({ route }: Props) => {
         if(params?.create) {
             socket.emit('createLobby', {
                 lobbyID: lobbyID,
-                name: params?.name,
+                name: userNameInAllScreens,
                 userID: params?.userID
             });
         }
@@ -63,7 +66,7 @@ export const Lobby = ({ route }: Props) => {
     const handleBackPress = () => {
         socket.emit('disconnectFromLobby', {
             lobbyID: lobbyID,
-            name: params?.name,
+            name: userNameInAllScreens,
             userID: params?.userID
         });
         return false;
@@ -123,7 +126,7 @@ export const Lobby = ({ route }: Props) => {
                 <ScrollView showsVerticalScrollIndicator={false}>
                     <S.PlayersContainer>
                         {lobby?.players?.map(player => (
-                            <S.PlayerContainer key={player?.id}>
+                            <S.PlayerContainer key={player?.userID}>
                                 <S.PlayerIconContainer>
                                     <Ionicons size={42} color={'white'} name="person-outline" />
                                 </S.PlayerIconContainer>
