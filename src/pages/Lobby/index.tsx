@@ -1,14 +1,14 @@
 import React, { useEffect, useState } from "react";
 import 'react-native-get-random-values';
 import * as S from './styles';
-import { BackHandler, SafeAreaView, ScrollView, StatusBar, Text, TouchableOpacity, View } from "react-native";
+import { BackHandler, ScrollView, StatusBar, Text, TouchableOpacity, View, Share } from "react-native";
 import * as Clipboard from 'expo-clipboard';
 import io from 'socket.io-client';
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { RootStackParamList } from "../../../App";
 import Ionicons from '@expo/vector-icons/Ionicons';
 import { useNavigation } from "@react-navigation/native";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import { UserSliceState } from "../../slices/userStore";
 
 const socket = io('http://192.168.15.129:3333', {
@@ -73,11 +73,21 @@ export const Lobby = ({ route }: Props) => {
     };
 
     const copyCode = async () => {
-        await Clipboard.setStringAsync(lobby?.id ?? '');
+        await Clipboard.setStringAsync(lobbyID);
         setShowToast(true)
         setTimeout(() => {
             setShowToast(false);
         }, 2000)
+    }
+
+    const onShare = async () => {
+        try {
+            await Share.share({
+                message: `O id da sala é: ${lobbyID}`,
+            });
+        } catch (error: any) {
+            console.error(error?.message)
+        }
     }
 
     return (
@@ -86,13 +96,13 @@ export const Lobby = ({ route }: Props) => {
             <S.Header>
                 <TouchableOpacity onPress={() => {
                     navigate.goBack();
-                    handleBackPress();
                 }}>
-                    <Ionicons name="chevron-back-outline" color={'#FFF'} size={36} />
+                    <Ionicons name="chevron-back-outline" color={'#FFF'} size={28} />
                 </TouchableOpacity>
-                <Text style={{color: 'white', marginLeft: 126, fontSize: 20}}>Lobby</Text>
+                <Text style={{color: 'white', fontSize: 16}}>Lobby</Text>
+                <Ionicons style={{opacity: 0}} name="information-circle-outline" color={'#FFF'} size={28} />
             </S.Header>
-            <View style={{height: 4, width: '100%', backgroundColor: '#cecece', opacity: .55}}></View>
+            <View style={{height: 4, width: '100%', backgroundColor: '#cecece', opacity: .55}}/>
 
             <S.Container>
                 <S.ContainerId
@@ -113,8 +123,10 @@ export const Lobby = ({ route }: Props) => {
                         <S.Id>{lobby?.id}</S.Id>
                     </S.ContainerWithId>
                     <S.ShareContainer>
-                        <S.CopyButton onPress={copyCode}><Text>Copiar código</Text></S.CopyButton>
-                        <S.ShareButton><Text>Share</Text></S.ShareButton>
+                        <S.CopyButton onPress={copyCode}><Text style={{color: '#3A3A50', fontSize: 18, fontWeight: '700'}}>Copiar código</Text></S.CopyButton>
+                        <S.ShareButton onPress={onShare}>
+                            <Ionicons name="share-social-outline" color={'#3A3A50'} size={28} />
+                        </S.ShareButton>
                     </S.ShareContainer>
                 </S.ContainerId>
                 {

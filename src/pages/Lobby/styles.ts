@@ -10,6 +10,7 @@ export const Header = styled.View`
     width: 100%;
     background-color: #3A3A50;
     align-items: center;
+    justify-content: space-between;
     padding: 0 10px;
     flex-direction: row;
 `
@@ -74,9 +75,9 @@ export const ShareButton = styled.TouchableOpacity`
 `
 
 export const ClipboardToast = styled.View`
-    height: 45px;
-    width: 90%;
-    bottom: 100px;
+    height: 60px;
+    width: 100%;
+    bottom: 50px;
     align-self: center;
     position: absolute;
     background-color: rgba(100,100,100, .4);
