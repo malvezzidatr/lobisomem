@@ -17,9 +17,10 @@ const socket = io('http://192.168.15.129:3333', {
 
 interface Props extends NativeStackScreenProps<RootStackParamList, 'Lobby'> {}
 
-interface Player {
+export interface Player {
     userID: string;
-    name: string
+    name: string;
+    admin: boolean;
 }
 
 export interface Lobby {
@@ -46,7 +47,8 @@ export const Lobby = ({ route }: Props) => {
             socket.emit('createLobby', {
                 lobbyID: lobbyID,
                 name: userNameInAllScreens,
-                userID: params?.userID
+                userID: params?.userID,
+                admin: true
             });
         }
         socket.on(`lobby_${lobbyID}`, (lobby: any) => {
@@ -63,12 +65,16 @@ export const Lobby = ({ route }: Props) => {
         return () => backHandler.remove();
     }, [navigate]);
 
-    const handleBackPress = () => {
+    const disconnectFromLobby = () => {
         socket.emit('disconnectFromLobby', {
             lobbyID: lobbyID,
             name: userNameInAllScreens,
             userID: params?.userID
         });
+    }
+
+    const handleBackPress = () => {
+        disconnectFromLobby()
         return false;
     };
 
@@ -92,18 +98,6 @@ export const Lobby = ({ route }: Props) => {
 
     return (
         <>
-            <StatusBar backgroundColor={'#3A3A50'}/>
-            <S.Header>
-                <TouchableOpacity onPress={() => {
-                    navigate.goBack();
-                }}>
-                    <Ionicons name="chevron-back-outline" color={'#FFF'} size={28} />
-                </TouchableOpacity>
-                <Text style={{color: 'white', fontSize: 16}}>Lobby</Text>
-                <Ionicons style={{opacity: 0}} name="information-circle-outline" color={'#FFF'} size={28} />
-            </S.Header>
-            <View style={{height: 4, width: '100%', backgroundColor: '#cecece', opacity: .55}}/>
-
             <S.Container>
                 <S.ContainerId
                     style={{
@@ -114,7 +108,6 @@ export const Lobby = ({ route }: Props) => {
                         },
                         shadowOpacity: 0.30,
                         shadowRadius: 4.65,
-    
                         elevation: 50,
                     }}
                 >
@@ -147,6 +140,13 @@ export const Lobby = ({ route }: Props) => {
                         ))}
                     </S.PlayersContainer>
                 </ScrollView>
+                {
+                    lobby?.players.find(usuario => usuario.userID === params?.userID && usuario.admin === true) && (
+                        <S.NextButton onPress={() => navigate.navigate('ChooseCharacters')}>
+                            <S.NextButtonText>Próximo</S.NextButtonText>
+                        </S.NextButton>
+                    )
+                }
             </S.Container>
         </>
     )

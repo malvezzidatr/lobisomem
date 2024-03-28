@@ -1,3 +1,5 @@
+import { Player } from "../pages/Lobby";
+
 export const generateLobby = (width: number = 9) => {
     const caracteres = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
     let codigo = '';

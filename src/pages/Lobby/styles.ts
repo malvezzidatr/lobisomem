@@ -5,16 +5,6 @@ export const Container = styled.View`
     flex: 1;
 `
 
-export const Header = styled.View`
-    height: 70px;
-    width: 100%;
-    background-color: #3A3A50;
-    align-items: center;
-    justify-content: space-between;
-    padding: 0 10px;
-    flex-direction: row;
-`
-
 export const ContainerId = styled.View`
     width: 100%;
     height: 235px;
@@ -24,7 +14,6 @@ export const ContainerId = styled.View`
     justify-content: space-evenly;
     padding: 0 18px;
     margin-top: 40px;
-    
 `
 
 export const Text = styled.Text`
@@ -77,13 +66,14 @@ export const ShareButton = styled.TouchableOpacity`
 export const ClipboardToast = styled.View`
     height: 60px;
     width: 100%;
-    bottom: 50px;
+    bottom: 120px;
     align-self: center;
     position: absolute;
     background-color: rgba(100,100,100, .4);
     align-items: center;
     justify-content: center;
-    border-radius: 20px;
+    border-radius: 10px;
+    z-index: 99;
 `
 
 export const PlayersContainer = styled.View`
@@ -117,3 +107,18 @@ export const PlayerName = styled.Text`
     margin-top: 5px;
 ` 
 
+export const NextButton = styled.TouchableOpacity`
+    width: 100%;
+    background-color: #3A3A50;
+    padding: 16px;
+    align-items: center;
+    justify-content: center;
+    border-radius: 10px;
+    margin-bottom: 30px;
+`
+
+export const NextButtonText = styled.Text`
+    font-size: 24px;
+    color: #FFF;
+    font-weight: bold;
+`

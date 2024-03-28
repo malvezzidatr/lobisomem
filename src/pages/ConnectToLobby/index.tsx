@@ -28,26 +28,14 @@ export const ConnectToLobby = () => {
         })
     }
 
-    useEffect(() => {
-        socket.on(userID, (lobby: Lobby) => {
-            if(lobby) {
-                navigate.navigate('Lobby', { lobby, name: userNameInAllScreens, userID });
-            }
-        })
-    }, [socket.on])
+    socket.on(userID, (lobby: Lobby) => {
+        if(lobby) {
+            navigate.navigate('Lobby', { lobby, name: userNameInAllScreens, userID });
+        }
+    })
 
     return (
         <View style={{ flex: 1 }}>
-            <StatusBar backgroundColor={'#3A3A50'}/>
-            <S.Header>
-                <TouchableOpacity onPress={() => {
-                    navigate.goBack();
-                }}>
-                    <Ionicons name="chevron-back-outline" color={'#FFF'} size={28} />
-                </TouchableOpacity>
-                <Text style={{color: 'white', fontSize: 16}}>Conectar a uma sala</Text>
-                <Ionicons style={{opacity: 0}} name="information-circle-outline" color={'#FFF'} size={28} />
-            </S.Header>
             <View style={{height: 4, width: '100%', backgroundColor: '#cecece', opacity: .55}}/>
 
             <TextInput
